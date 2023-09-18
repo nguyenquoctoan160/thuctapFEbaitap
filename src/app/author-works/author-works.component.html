@@ -1,0 +1,61 @@
+<button (click)="goBack()">Go back</button>
+<div id="spinner-overlay" class="spinner-overlay" style="display: none">
+  <div id="spinner" class="spinner"></div>
+</div>
+<div class="main-title">
+  <h1>Danh sách tác phẩm của {{authorName}}</h1>
+</div>
+<table class="atable">
+  <tr *ngFor="let work of works">
+    <td>{{ work.title }}</td>
+    <!--    <td>{{ work.published_date }}</td>-->
+    <td>
+      <button (click)="openWorkDetails(work)"
+              type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#detailsModal"
+      >Xem chi tiết
+      </button>
+    </td>
+  </tr>
+  <tr *ngIf="works.length === 0">
+    <td colspan="2">Không tìm thấy tác phẩm</td>
+  </tr>
+</table>
+
+<div class="pagination">
+  <button [disabled]="currentPage === 1" (click)="prevPage()">Trang trước</button>
+  <input type="number" id="page" value="{{currentPage}}" (keyup.enter)="goToPage()">
+  <button [disabled]="works.length < 10" (click)="nextPage()">Trang kế tiếp</button>
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="detailsModal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title" *ngIf="detailWork">{{ detailWork.title }}</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+
+      <!-- Modal body -->
+      <div class="modal-body" *ngIf="detailWork">
+        <h4>Chủ đề: <h4 *ngFor="let sub of detailWork.subjects"> - {{sub}} </h4></h4>
+        <h4>Chủ đề con người: <h4 *ngFor="let sub of detailWork.subjectpeople"> - {{sub}} </h4></h4>
+        <p>Tái bản mới nhất: {{ detailWork.latest_revision }}</p>
+        <p>Tái bản: {{ detailWork.revision }}</p>
+        <p>Ngày tạo: {{ detailWork.created.value | date:'dd/MM/yyyy' }}</p>
+        <p>Ngày chỉnh sửa lần cuối: {{ detailWork.last_modified.value | date:'dd/MM/yyyy' }}</p>
+
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
